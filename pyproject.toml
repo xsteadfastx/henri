@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "henri"
+version = "0.0.0"
+description = "negative processing powered by micropython"
+authors = ["Marvin Preuss <marvin@xsteadfastx.org>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+click = "^7.0"
+
+[tool.poetry.dev-dependencies]
+black = "=18.9b0"
+codecov = "^2.0"
+flake8 = "^3.7"
+isort = "^4.3"
+mypy = "^0.720.0"
+pylint = "^2.3"
+pytest = "^5.0"
+pytest-cov = "^2.7"
+tox = "^3.13"
+rshell = "^0.0.26"
+ampy = "^1.2"
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

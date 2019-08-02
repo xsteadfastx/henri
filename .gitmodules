@@ -1,0 +1,9 @@
+[submodule "submodules/picoweb"]
+	path = submodules/picoweb
+	url = https://github.com/xsteadfastx/picoweb.git
+[submodule "submodules/micropython"]
+	path = submodules/micropython
+	url = https://github.com/xsteadfastx/micropython.git
+[submodule "submodules/pycopy-lib"]
+	path = submodules/pycopy-lib
+	url = https://github.com/xsteadfastx/pycopy-lib.git
