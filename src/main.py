@@ -1,5 +1,7 @@
 import config
 import network
+import picoweb
+import ulogging as logging
 
 
 def do_connect():
@@ -23,3 +25,17 @@ def create_ap():
 
 
 create_ap()
+# do_connect()
+
+
+def index(req, resp):
+    yield from picoweb.start_response(resp)
+    yield from resp.awrite("hello world.")
+
+
+ROUTES = [("/", index)]
+
+logging.basicConfig(level=logging.DEBUG)
+
+APP = picoweb.WebApp(__name__, ROUTES)
+APP.run(host="0.0.0.0", port="80", debug=True)
