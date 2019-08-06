@@ -23,4 +23,4 @@ build-builder:
 	docker build -f Dockerfile.build -t henri-builder .
 
 build-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build henri-builder sh /origin/build.sh
