@@ -10,3 +10,6 @@
 [submodule "submodules/micropython-lib"]
 	path = submodules/micropython-lib
 	url = https://github.com/xsteadfastx/micropython-lib.git
+[submodule "submodules/pycopy"]
+	path = submodules/pycopy
+	url = https://github.com/xsteadfastx/pycopy.git

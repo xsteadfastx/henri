@@ -1,4 +1,4 @@
-.PHONY: all clean init test formatting rshell copy
+.PHONY: all clean init test formatting rshell copy build-firmware
 
 init:
 	poetry install
@@ -18,3 +18,9 @@ copy:
 
 clean:
 	poetry run rshell -p /dev/ttyUSB0 rm -r /pyboard/*
+
+build-builder:
+	docker build -f Dockerfile.build -t henri-builder .
+
+build-firmware:
+	docker run --rm -ti -v $(PWD):/origin:ro henri-builder sh /origin/build.sh
