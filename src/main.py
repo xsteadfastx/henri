@@ -1,6 +1,7 @@
 import config
 import network
 import picoweb
+import uasyncio as asyncio
 import ulogging as logging
 
 
@@ -16,26 +17,71 @@ def do_connect():
         print("network config: ", wlan.ifconfig())
 
 
-def create_ap():
-    """Create AP for client to connect to."""
-    ap = network.WLAN(network.AP_IF)
-    ap.active(True)
-    ap.config(essid="henri")
-    ap.ifconfig(("192.168.95.1", "255.255.255.0", "192.168.95.1", "192.168.95.1"))
+class Henri:
+    """We love you Henri Cartier-Bresson."""
 
+    def __init__(self):
+        self.ap_ip = "192.168.95.1"
+        self.push_queue = set()
+        self.app = picoweb.WebApp(__name__)
 
-create_ap()
-# do_connect()
+    def create_ap(self):
+        """Create AP for client to connect to."""
+        access_point = network.WLAN(network.AP_IF)
+        access_point.active(True)
+        access_point.config(essid="henri")
+        access_point.ifconfig((self.ap_ip, "255.255.255.0", self.ap_ip, self.ap_ip))
 
+    def index(self, req, resp):  # pylint: disable=unused-argument,no-self-use
+        """Serving index site."""
+        await picoweb.start_response(resp)
+        await resp.awrite(
+            """\
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <script>
+    var source = new EventSource("events");
+    source.onmessage = function(event) {
+        document.getElementById("result").innerHTML = event.data + "<br>";
+    }
+    source.onerror = function(error) {
+        console.log(error);
+        document.getElementById("result").innerHTML += "EventSource error:" + error + "<br>";
+    }
+    </script>
+    </head>
+    <body>
+    <div id="result"></div>
+    </body>
+    </html>
+    """
+        )
 
-def index(req, resp):
-    yield from picoweb.start_response(resp)
-    yield from resp.awrite("hello world.")
+    def events(self, req, resp):
+        """Serving events."""
+        logging.info("Event source %r connected", resp)
+        await resp.awrite("HTTP/1.0 200 OK\r\n")
+        await resp.awrite("Content-Type: text/event-stream\r\n")
+        await resp.awrite("\r\n")
+        i = 0
+        try:
+            while True:
+                await resp.awrite("data: %d\n\n" % i)
+                await asyncio.sleep(1)
+                i += 1
+        except OSError:
+            logging.info("Event source connection closed")
+            await resp.aclose()
 
+    def run(self):
+        """Run webserver."""
+        self.app.url_map = [("/", self.index), ("/events", self.events)]
+        self.app.run(host="0.0.0.0", port="80", debug=True)
 
-ROUTES = [("/", index)]
 
 logging.basicConfig(level=logging.DEBUG)
 
-APP = picoweb.WebApp(__name__, ROUTES)
-APP.run(host="0.0.0.0", port="80", debug=True)
+HENRI = Henri()
+HENRI.create_ap()
+HENRI.run()
