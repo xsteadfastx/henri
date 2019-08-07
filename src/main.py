@@ -1,8 +1,7 @@
 import ulogging as logging
-from henri import Henri
+import henri
 
 logging.basicConfig(level=logging.DEBUG)
 
-HENRI = Henri()
-HENRI.create_ap()
-HENRI.run()
+henri.create_ap()
+henri.run()
