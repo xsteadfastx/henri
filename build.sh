@@ -11,21 +11,19 @@ sudo chown -R builder /build
 # freeze modules
 if [ "${DEPS}" = "True" ]; then
         ## pkg_resources
-        ln -s /henri/src/lib/pkg_resources.py /henri/submodules/pycopy/ports/esp32/modules/pkg_resources.py
+        ln -s /henri/submodules/pycopy-lib/pkg_resources/pkg_resources.py /henri/submodules/pycopy/ports/esp32/modules/pkg_resources.py
         ## uasyncio
-        mkdir /henri/submodules/pycopy/ports/esp32/modules/uasyncio
-        ln -s /henri/src/lib/uasyncio/__init__.py /henri/submodules/pycopy/ports/esp32/modules/uasyncio/__init__.py
-        ln -s /henri/src/lib/uasyncio/core.py /henri/submodules/pycopy/ports/esp32/modules/uasyncio/core.py
+        ln -s /henri/submodules/pycopy-lib/uasyncio/uasyncio /henri/submodules/pycopy/ports/esp32/modules/uasyncio
+        ln -s /henri/submodules/pycopy-lib/uasyncio.core/uasyncio/core.py /henri/submodules/pycopy/ports/esp32/modules/uasyncio/core.py
         ## picoweb
-        mkdir /henri/submodules/pycopy/ports/esp32/modules/picoweb
-        ln -s /henri/src/lib/picoweb/__init__.py /henri/submodules/pycopy/ports/esp32/modules/picoweb/__init__.py
-        ln -s /henri/src/lib/picoweb/utils.py /henri/submodules/pycopy/ports/esp32/modules/picoweb/utils.py
+        ln -s /henri/submodules/picoweb/picoweb /henri/submodules/pycopy/ports/esp32/modules/picoweb
         ## ulogging
-        ln -s /henri/src/lib/ulogging.py /henri/submodules/pycopy/ports/esp32/modules/ulogging.py
-        fi
+        ln -s /henri/submodules/pycopy-lib/ulogging/ulogging.py /henri/submodules/pycopy/ports/esp32/modules/ulogging.py
+fi
 ## henri
 if [ "${HENRI}" = "True" ]; then
         ln -s /henri/src/henri.py /henri/submodules/pycopy/ports/esp32/modules/henri.py
+        ln -s /henri/src/main.py /henri/submodules/pycopy/ports/esp32/modules/main.py
 fi
 
 # change to pycopy dir

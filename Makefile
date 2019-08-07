@@ -1,4 +1,4 @@
-.PHONY: all clean init test formatting rshell copy build-builder build-henri-firmware build-deps-firmware build-plain-firmware flash
+.PHONY: all clean init test formatting rshell sync build-builder build-henri-firmware build-deps-firmware build-plain-firmware flash erase-flash flash-henri flash-deps flash-plain
 
 init:
 	poetry install
@@ -12,7 +12,7 @@ formatting:
 rshell:
 	poetry run rshell -p /dev/ttyUSB0
 
-copy:
+sync:
 	poetry run rshell -p /dev/ttyUSB0 rsync -m src/ /pyboard
 
 clean:
@@ -32,6 +32,14 @@ build-plain-firmware:
 
 all: build-henri-firmware build-deps-firmware build-plain-firmware
 
-flash:
+erase-flash:
 	poetry run esptool.py --port /dev/ttyUSB0 erase_flash
-	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware.bin
+
+flash-henri: erase-flash
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-henri.bin
+
+flash-deps: erase-flash
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-deps.bin
+
+flash-plain: erase-flash
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-plain.bin
