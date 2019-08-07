@@ -22,7 +22,9 @@ ln -s /henri/src/lib/picoweb/utils.py /henri/submodules/pycopy/ports/esp32/modul
 ## ulogging
 ln -s /henri/src/lib/ulogging.py /henri/submodules/pycopy/ports/esp32/modules/ulogging.py
 ## henri
-ln -s /henri/src/henri.py /henri/submodules/pycopy/ports/esp32/modules/henri.py
+if [ "${HENRI}" = "True" ]; then
+        ln -s /henri/src/henri.py /henri/submodules/pycopy/ports/esp32/modules/henri.py
+fi
 
 # change to pycopy dir
 cd /henri/submodules/pycopy

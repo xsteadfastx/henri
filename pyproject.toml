@@ -21,6 +21,7 @@ pytest-cov = "^2.7"
 tox = "^3.13"
 rshell = "^0.0.26"
 ampy = "^1.2"
+esptool = "^2.7"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
