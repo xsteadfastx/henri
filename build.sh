@@ -26,6 +26,15 @@ if [ "${HENRI}" = "True" ]; then
         ln -s /henri/src/main.py /henri/submodules/pycopy/ports/esp32/modules/main.py
 fi
 
+# remove some uneeded modules
+rm /henri/submodules/pycopy/ports/esp32/modules/neopixel.py
+rm /henri/submodules/pycopy/ports/esp32/modules/upip.py
+rm /henri/submodules/pycopy/ports/esp32/modules/upip_utarfile.py
+rm /henri/submodules/pycopy/ports/esp32/modules/urequests.py
+rm /henri/submodules/pycopy/ports/esp32/modules/webrepl.py
+rm /henri/submodules/pycopy/ports/esp32/modules/webrepl_setup.py
+rm /henri/submodules/pycopy/ports/esp32/modules/websocket_helper.py
+
 # change to pycopy dir
 cd /henri/submodules/pycopy
 
