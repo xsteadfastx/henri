@@ -11,6 +11,7 @@ steps:
       DEPS: True
       PORT: esp32
     commands:
+      - sudo mkdir /build
       - sh build.sh
   - name: esp32-deps
     image: quay.io/xsteadfastx/henri-builder
@@ -19,6 +20,7 @@ steps:
       DEPS: True
       PORT: esp32
     commands:
+      - sudo mkdir /build
       - sh build.sh
   - name: esp32-plain
     image: quay.io/xsteadfastx/henri-builder
@@ -27,6 +29,7 @@ steps:
       DEPS: False
       PORT: esp32
     commands:
+      - sudo mkdir /build
       - sh build.sh
   - name: unix
     image: quay.io/xsteadfastx/henri-builder
@@ -35,4 +38,5 @@ steps:
       DEPS: True
       PORT: unix
     commands:
+      - sudo mkdir /build
       - sh build.sh
