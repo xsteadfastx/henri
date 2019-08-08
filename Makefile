@@ -1,4 +1,10 @@
-.PHONY: all clean init test formatting rshell sync build-builder build-henri-firmware build-deps-firmware build-plain-firmware build-unix flash erase-flash flash-henri flash-deps flash-plain
+.PHONY: all clean init test \
+	formatting \
+	rshell \
+	sync \
+	build-builder push-builder \
+	build-henri-firmware build-deps-firmware build-plain-firmware build-unix \
+	flash erase-flash flash-henri flash-deps flash-plain
 
 init:
 	poetry install
@@ -19,7 +25,10 @@ clean:
 	poetry run rshell -p /dev/ttyUSB0 rm -r /pyboard/*
 
 build-builder:
-	docker build -f Dockerfile.build -t henri-builder .
+	docker build -f Dockerfile.build -t quay.io/xsteadfastx/henri-builder .
+
+push-builder:
+	docker push quay.io/xsteadfastx/henri-builder
 
 build-henri-firmware:
 	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" henri-builder sh /origin/build.sh
