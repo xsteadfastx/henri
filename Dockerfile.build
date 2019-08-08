@@ -9,19 +9,26 @@ RUN set -ex \
         autoconf \
         automake \
         bison \
+        build-essential \
         flex \
         g++ \
         gawk \
         gcc \
+        gcc-arm-none-eabi \
+        git \
         git \
         gperf \
         help2man \
         libexpat1-dev \
+        libffi-dev \
         libmbedtls-dev \
         libncurses5-dev \
+        libnewlib-arm-none-eabi \
+        libreadline-dev \
         libtool \
         libtool-bin \
         make \
+        pkg-config \
         python \
         python-pip \
         sed \

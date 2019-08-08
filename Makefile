@@ -1,4 +1,4 @@
-.PHONY: all clean init test formatting rshell sync build-builder build-henri-firmware build-deps-firmware build-plain-firmware flash erase-flash flash-henri flash-deps flash-plain
+.PHONY: all clean init test formatting rshell sync build-builder build-henri-firmware build-deps-firmware build-plain-firmware build-unix flash erase-flash flash-henri flash-deps flash-plain
 
 init:
 	poetry install
@@ -22,15 +22,18 @@ build-builder:
 	docker build -f Dockerfile.build -t henri-builder .
 
 build-henri-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" henri-builder sh /origin/build.sh
 
 build-deps-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=True" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=True" -e "PORT=esp32" henri-builder sh /origin/build.sh
 
 build-plain-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" -e "PORT=esp32" henri-builder sh /origin/build.sh
 
-all: build-henri-firmware build-deps-firmware build-plain-firmware
+build-unix:
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=unix" henri-builder sh /origin/build.sh
+
+all: build-henri-firmware build-deps-firmware build-plain-firmware build-unix
 
 erase-flash:
 	poetry run esptool.py --port /dev/ttyUSB0 erase_flash
