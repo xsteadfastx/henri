@@ -1,9 +1,9 @@
+import gc
 import random
-
-import uasyncio as asyncio
 
 import network
 import picoweb
+import uasyncio as asyncio
 import ulogging as logging
 
 EQ = []
@@ -50,6 +50,13 @@ async def event_filler():
         yield from asyncio.sleep(1)
 
 
+async def janitor():
+    while True:
+        logging.info("Clean memory...")
+        gc.collect()
+        yield from asyncio.sleep(5)
+
+
 def events(req, resp):
     """Serving events."""
     global EQ
@@ -70,6 +77,7 @@ def events(req, resp):
 def run():
     """Run webserver."""
     loop = asyncio.get_event_loop()
+    loop.create_task(janitor())
     loop.create_task(event_filler())
     url_map = [("/", index), ("/events", events)]
     app = picoweb.WebApp(__name__, url_map)
