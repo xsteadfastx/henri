@@ -2,8 +2,7 @@
 kind: pipeline
 name: build
 workspace:
-  base: /
-  path: origin
+  base: /origin
 steps:
   - name: esp32-henri
     image: quay.io/xsteadfastx/henri-builder
