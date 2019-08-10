@@ -1,4 +1,5 @@
 .PHONY: all clean init test \
+	run \
 	formatting \
 	rshell \
 	sync \
@@ -10,7 +11,7 @@ init:
 	poetry install
 
 test:
-	poetry run tox
+	poetry run tox -e unittest
 
 formatting:
 	poetry run tox -e formatting
@@ -22,6 +23,7 @@ sync:
 	poetry run rshell -p /dev/ttyUSB0 rsync -m src/ /pyboard
 
 clean:
+	docker volume rm henri-build-temp
 	poetry run rshell -p /dev/ttyUSB0 rm -r /pyboard/*
 
 build-builder:
@@ -31,16 +33,22 @@ push-builder:
 	docker push quay.io/xsteadfastx/henri-builder
 
 build-henri-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
 
 build-deps-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=True" -e "PORT=esp32" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=True" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
 
 build-plain-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" -e "PORT=esp32" henri-builder sh /origin/build.sh
+	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
 
 build-unix:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=unix" henri-builder sh /origin/build.sh
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-v henri-build-temp:/henri/submodules/pycopy/lib \
+		-e "HENRI=True" -e "DEPS=True" -e "PORT=unix" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
 
 all: build-henri-firmware build-deps-firmware build-plain-firmware build-unix
 
@@ -55,3 +63,6 @@ flash-deps: erase-flash
 
 flash-plain: erase-flash
 	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-plain.bin
+
+run:
+	build/pycopy -m run

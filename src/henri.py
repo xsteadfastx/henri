@@ -1,7 +1,6 @@
 import gc
 import random
 
-import network
 import picoweb
 import uasyncio as asyncio
 import ulogging as logging
@@ -10,6 +9,8 @@ EQ = []
 
 
 def create_ap():
+    import network
+
     ap = network.WLAN(network.AP_IF)
     ap.active(True)
     ap.config(essid="henri")
@@ -45,7 +46,7 @@ source.onerror = function(error) {
 async def event_filler():
     global EQ
     while True:
-        EQ.append(random.choice(["foo", "bar", "zonk"]))
+        EQ.append(random.randint(0, 100))
         logging.debug("queue: %s" % EQ)
         yield from asyncio.sleep(1)
 
@@ -54,7 +55,7 @@ async def janitor():
     while True:
         logging.info("Clean memory...")
         gc.collect()
-        yield from asyncio.sleep(5)
+        yield from asyncio.sleep(30)
 
 
 def events(req, resp):
@@ -74,11 +75,11 @@ def events(req, resp):
         yield from resp.aclose()
 
 
-def run():
+def run(host="0.0.0.0", port="80"):
     """Run webserver."""
     loop = asyncio.get_event_loop()
     loop.create_task(janitor())
     loop.create_task(event_filler())
     url_map = [("/", index), ("/events", events)]
     app = picoweb.WebApp(__name__, url_map)
-    app.run(host="0.0.0.0", port="80", debug=True)
+    app.run(host=host, port=port, debug=True)
