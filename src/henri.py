@@ -56,14 +56,14 @@ async def janitor():
         logging.debug("clean memory")
         gc.collect()
         logging.debug("clean EQ")
-        if EQ and len(EQ) > 10:
-            await queue_cleaner()
+        if EQ and len(EQ) > 3:
+            await queue_cleaner(3)
         await asyncio.sleep(5)
 
 
-async def queue_cleaner():
+async def queue_cleaner(num):
     global EQ
-    items_to_remove = len(EQ) - 10
+    items_to_remove = len(EQ) - num
     del EQ[:items_to_remove]
 
 
