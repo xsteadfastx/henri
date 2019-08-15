@@ -48,14 +48,23 @@ async def event_filler():
     while True:
         EQ.append(random.randint(0, 100))
         logging.debug("queue: %s" % EQ)
-        yield from asyncio.sleep(1)
+        await asyncio.sleep(0.3)
 
 
 async def janitor():
     while True:
-        logging.info("Clean memory...")
+        logging.debug("clean memory")
         gc.collect()
-        yield from asyncio.sleep(30)
+        logging.debug("clean EQ")
+        if EQ and len(EQ) > 10:
+            await queue_cleaner()
+        await asyncio.sleep(5)
+
+
+async def queue_cleaner():
+    global EQ
+    items_to_remove = len(EQ) - 10
+    del EQ[:items_to_remove]
 
 
 def events(req, resp):
