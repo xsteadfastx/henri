@@ -11,7 +11,9 @@ for test in TESTS:
     try:
         m = __import__(test)
         unittest.main(module=m)
-    except BaseException:
-        FAILURES_NUM += 1
+    except SystemExit as e:
+        if str(e) == "True":
+            FAILURES_NUM += 1
 
-sys.exit(FAILURES_NUM > 0)
+if FAILURES_NUM > 0:
+    sys.exit(1)
