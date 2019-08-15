@@ -1,9 +1,9 @@
 import sys
 
+import ulogging as logging
+
 sys.path.insert(0, "src/")
-import foobar  # isort:skip
+import henri  # isort:skip
 
-
-# import henri
-
-# henri.run(port="8180", debug=True)
+logging.basicConfig(level=logging.DEBUG)
+henri.run(port="8180")
