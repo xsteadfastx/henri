@@ -27,6 +27,9 @@ if [ "${DEPS}" = "True" ]; then
         ln -s \
                 /henri/submodules/picoweb/picoweb \
                 /henri/submodules/pycopy/ports/"${PORT}"/modules/picoweb
+        ln -s \
+                /henri/submodules/utemplate/utemplate \
+                /henri/submodules/pycopy/ports/"${PORT}"/modules/utemplate
 
         # ulogging
         ln -s \

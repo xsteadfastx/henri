@@ -7,3 +7,6 @@
 [submodule "submodules/pycopy"]
 	path = submodules/pycopy
 	url = https://github.com/xsteadfastx/pycopy.git
+[submodule "submodules/utemplate"]
+	path = submodules/utemplate
+	url = https://github.com/xsteadfastx/utemplate.git
