@@ -1,8 +1,7 @@
 import picoweb
 import uasyncio as asyncio
 import ulogging as logging
-
-from .app import APP, EQ
+from henri.app import APP, EQ
 
 
 @APP.route("/")

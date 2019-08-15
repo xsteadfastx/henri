@@ -1,9 +1,8 @@
 import gc
 
 import uasyncio as asyncio
-
-from . import coros, views
-from .app import APP
+from henri import coros, views
+from henri.app import APP
 
 
 def main(**params):

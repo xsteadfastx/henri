@@ -3,8 +3,7 @@ import random
 
 import uasyncio as asyncio
 import ulogging as logging
-
-from .app import EQ
+from henri.app import EQ
 
 
 async def event_filler():
