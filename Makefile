@@ -65,4 +65,5 @@ flash-plain: erase-flash
 	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-plain.bin
 
 run:
+	rm src/henri/templates/*_html.py
 	build/pycopy -m run

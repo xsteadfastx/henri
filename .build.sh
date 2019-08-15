@@ -51,7 +51,7 @@ if [ "${DEPS}" = "True" ]; then
 fi
 ## henri
 if [ "${HENRI}" = "True" ]; then
-        ln -s /henri/src/henri.py /henri/submodules/pycopy/ports/"${PORT}"/modules/henri.py
+        ln -s /henri/src/henri /henri/submodules/pycopy/ports/"${PORT}"/modules/henri
         ln -s /henri/src/main.py /henri/submodules/pycopy/ports/"${PORT}"/modules/main.py
 fi
 

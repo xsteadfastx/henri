@@ -4,7 +4,7 @@ import unittest
 sys.path.insert(0, "tests")
 sys.path.insert(0, "src")
 
-TESTS = ["test_henri"]
+TESTS = ["test_coros"]
 FAILURES_NUM = 0
 
 for test in TESTS:
