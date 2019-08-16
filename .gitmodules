@@ -10,3 +10,6 @@
 [submodule "submodules/utemplate"]
 	path = submodules/utemplate
 	url = https://github.com/xsteadfastx/utemplate.git
+[submodule "submodules/tinydns"]
+	path = submodules/tinydns
+	url = https://github.com/xsteadfastx/tinydns.git
