@@ -5,7 +5,8 @@
 	sync \
 	build-builder push-builder \
 	build-henri-firmware build-deps-firmware build-plain-firmware build-unix \
-	flash erase-flash flash-henri flash-deps flash-plain
+	flash erase-flash flash-henri flash-deps flash-plain \
+	res
 
 init:
 	poetry install
@@ -32,7 +33,7 @@ build-builder:
 push-builder:
 	docker push quay.io/xsteadfastx/henri-builder
 
-build-henri-firmware:
+build-henri-firmware: res
 	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
 
 build-deps-firmware:
@@ -41,7 +42,7 @@ build-deps-firmware:
 build-plain-firmware:
 	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
 
-build-unix:
+build-unix: res
 	docker run --rm -ti \
 		-v $(PWD):/origin:ro \
 		-v $(PWD)/build:/build \
@@ -50,7 +51,7 @@ build-unix:
 		quay.io/xsteadfastx/henri-builder \
 		sh /origin/.build.sh
 
-all: build-henri-firmware build-deps-firmware build-plain-firmware build-unix
+all: res build-henri-firmware build-deps-firmware build-plain-firmware build-unix
 
 erase-flash:
 	poetry run esptool.py --port /dev/ttyUSB0 erase_flash
@@ -67,3 +68,6 @@ flash-plain: erase-flash
 run:
 	rm src/henri/templates/*_html.py
 	build/pycopy -m run
+
+res:
+	cd src/henri; ../../submodules/pycopy/tools/mpy_bin2res.py static/css/* >R.py
