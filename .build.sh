@@ -41,6 +41,14 @@ if [ "${DEPS}" = "True" ]; then
                 /henri/submodules/pycopy-lib/random/random.py \
                 /henri/submodules/pycopy/ports/"${PORT}"/modules/random.py
 
+        # tinydns
+        ln -s \
+                /henri/submodules/tinydns/tinydns \
+                /henri/submodules/pycopy/ports/"${PORT}"/modules/tinydns
+        ln -s \
+                /henri/submodules/pycopy-lib/logging/logging \
+                /henri/submodules/pycopy/ports/"${PORT}"/modules/logging
+
         # for unix port
         if [ "${PORT}" = "unix" ]; then
                 # unittest
