@@ -2,58 +2,58 @@
 def render(*a, **d):
     yield """<!DOCTYPE html>
 <html>
-<head>
-    <link href=\"static/css/milligram.min.css\" rel=\"stylesheet\">
-    <script>
-    var source = new EventSource(\"events\");
-    source.onmessage = function(event) """
+  <head>
+      <link href=\"static/css/milligram.min.css\" rel=\"stylesheet\">
+      <script>
+      var source = new EventSource(\"events\");
+      source.onmessage = function(event) """
     yield """{
-        document.getElementById(\"result\").innerHTML = event.data;
-    }
-    source.onerror = function(error) """
+          document.getElementById(\"result\").innerHTML = event.data;
+      }
+      source.onerror = function(error) """
     yield """{
-        console.log(error);
-        document.getElementById(\"result\").innerHTML += \"EventSource error:\" + error + \"<br>\";
-    }
-  </script>
-</head>
-<body>
-  <div class=\"container\">
-    <h1>henri - the negative processor</h1>
-    <form>
-      <fieldset>
-        <h3>Process Time</h3>
-        <label for=\"processTimeField\">Minutes</label>
-        <input type=\"text\" placeholder=\"7\" id=\"processTimeField\">
-        <br/>
-        <br/>
-        <h3>Initial</h3>
-        <label for=\"initMinuteField\">Minutes</label>
-        <select id=\"initMinuteField\">
-          <option value=\"1\">1</option>
-          <option value=\"2\">2</option>
-          <option value=\"3\">3</option>
-          <option value=\"4\">4</option>
-          <option value=\"5\">5</option>
-          <option value=\"6\">6</option>
-          <option value=\"7\">7</option>
-          <option value=\"8\">8</option>
-          <option value=\"9\">9</option>
-          <option value=\"10\">10</option>
-        </select>
-        <label for=\"initInvervalField\">Interval (sec)</label>
-        <select id=\"initIntervalField\">
-          <option value=\"2\">2</option>
-          <option value=\"5\">5</option>
-          <option value=\"10\">10</option>
-        </select>
-        <br/>
-        <br/>
-        <input class=\"button-primary\" type=\"submit\" value=\"Lets rock...\">
-      </fieldset>
-    </form>
-    <div>random int: <span id=\"result\"></span> (SSE Test)</div>
-  </div>
-</body>
+          console.log(error);
+          document.getElementById(\"result\").innerHTML += \"EventSource error:\" + error + \"<br>\";
+      }
+    </script>
+  </head>
+  <body>
+    <div class=\"container\">
+      <h1>henri - the negative processor</h1>
+      <form action=\".\", method=\"POST\">
+        <fieldset>
+          <h3>Process Time</h3>
+          <label>Minutes</label>
+          <input type=\"text\" placeholder=\"7\" name=\"full_process_time\" id=\"full_process_time\">
+          <br/>
+          <br/>
+          <h3>Initial</h3>
+          <label>Minutes</label>
+          <select id=\"init_time\" name=\"init_time\">
+            <option value=\"1\">1</option>
+            <option value=\"2\">2</option>
+            <option value=\"3\">3</option>
+            <option value=\"4\">4</option>
+            <option value=\"5\">5</option>
+            <option value=\"6\">6</option>
+            <option value=\"7\">7</option>
+            <option value=\"8\">8</option>
+            <option value=\"9\">9</option>
+            <option value=\"10\">10</option>
+          </select>
+          <label>Interval (sec)</label>
+          <select id=\"init_interval\" name=\"init_interval\">
+            <option value=\"2\">2</option>
+            <option value=\"5\">5</option>
+            <option value=\"10\">10</option>
+          </select>
+          <br/>
+          <br/>
+          <input class=\"button-primary\" type=\"submit\" value=\"Lets rock...\">
+        </fieldset>
+      </form>
+      <div>random int: <span id=\"result\"></span> (SSE Test)</div>
+    </div>
+  </body>
 </html>
 """

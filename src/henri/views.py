@@ -4,8 +4,11 @@ import ulogging as logging
 from henri.app import APP, EQ
 
 
-@APP.route("/")
+@APP.route("/", methods=["GET", "POST"])
 def index(req, resp):
+    if req.method == "POST":
+        yield from req.read_form_data()
+        print(req.form)
     yield from picoweb.start_response(resp)
     yield from APP.render_template(resp, "index.html")
 
