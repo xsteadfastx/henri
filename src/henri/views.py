@@ -1,7 +1,8 @@
+import henri.app
 import picoweb
 import uasyncio as asyncio
 import ulogging as logging
-from henri.app import APP, EQ
+from henri.app import APP
 
 
 @APP.route("/", methods=["GET", "POST"])
@@ -15,15 +16,14 @@ def index(req, resp):
 
 @APP.route("/events")
 def events(req, resp):
-    global EQ
     logging.info("Event source %r connected", resp)
     yield from resp.awrite("HTTP/1.0 200 OK\r\n")
     yield from resp.awrite("Content-Type: text/event-stream\r\n")
     yield from resp.awrite("\r\n")
     try:
         while True:
-            if EQ:
-                yield from resp.awrite("data: %s\n\n" % EQ.pop())
+            if henri.app.EQ:
+                yield from resp.awrite("data: %s\n\n" % henri.app.EQ)
             yield from asyncio.sleep(0.1)
     except OSError:
         logging.info("Event source connection closed")

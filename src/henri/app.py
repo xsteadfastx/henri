@@ -1,5 +1,5 @@
 import picoweb
 
-EQ = []
+EQ = None
 
 APP = picoweb.WebApp(__name__)
