@@ -4,7 +4,7 @@
 	rshell \
 	sync \
 	build-builder push-builder \
-	build-henri-firmware build-deps-firmware build-plain-firmware build-unix \
+	build-esp32 build-esp8266 build-unix \
 	flash erase-flash flash-henri flash-deps flash-plain \
 	res
 
@@ -33,15 +33,51 @@ build-builder:
 push-builder:
 	docker push quay.io/xsteadfastx/henri-builder
 
-build-henri-firmware: res
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=True" -e "DEPS=True" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
+build-esp32: res
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=True" -e "DEPS=True" \
+		-e "PORT=esp32" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=False" -e "DEPS=True" \
+		-e "PORT=esp32" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=False" -e "DEPS=False" \
+		-e "PORT=esp32" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
 
-build-deps-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=True" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
-
-build-plain-firmware:
-	docker run --rm -ti -v $(PWD):/origin:ro -v $(PWD)/build:/build -e "HENRI=False" -e "DEPS=False" -e "PORT=esp32" quay.io/xsteadfastx/henri-builder sh /origin/.build.sh
-
+build-esp8266:
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=False" -e "DEPS=False" \
+		-e "PORT=esp8266" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=False" -e "DEPS=True" \
+		-e "PORT=esp8266" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
+	docker run --rm -ti \
+		-v $(PWD):/origin:ro \
+		-v $(PWD)/build:/build \
+		-e "HENRI=True" -e "DEPS=True" \
+		-e "PORT=esp8266" \
+		quay.io/xsteadfastx/henri-builder \
+		sh /origin/.build.sh
 build-unix: res
 	docker run --rm -ti \
 		-v $(PWD):/origin:ro \
@@ -51,7 +87,7 @@ build-unix: res
 		quay.io/xsteadfastx/henri-builder \
 		sh /origin/.build.sh
 
-all: res build-henri-firmware build-deps-firmware build-plain-firmware build-unix
+all: res build-esp32 build-unix
 
 erase-flash:
 	poetry run esptool.py --port /dev/ttyUSB0 erase_flash

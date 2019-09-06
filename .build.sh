@@ -64,11 +64,11 @@ if [ "${HENRI}" = "True" ]; then
 fi
 
 # remove some uneeded modules
-if [ "${PORT}" = "esp32" ]; then
+if [ "${PORT}" = "esp32" ] || [ "${PORT}" = "esp8266" ]; then
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/neopixel.py
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/upip.py
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/upip_utarfile.py
-        rm /henri/submodules/pycopy/ports/"${PORT}"/modules/urequests.py
+        # rm /henri/submodules/pycopy/ports/"${PORT}"/modules/urequests.py
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/webrepl.py
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/webrepl_setup.py
         rm /henri/submodules/pycopy/ports/"${PORT}"/modules/websocket_helper.py
@@ -80,24 +80,27 @@ cd /henri/submodules/pycopy
 # do the compiling and copying
 make -j4 -C mpy-cross
 
-if [ "${PORT}" = "esp32" ]; then
-        # clone some deps
-        git submodule update --init lib/berkeley-db-1.xx
-
+if [ "${PORT}" = "esp32" ] || [ "${PORT}" = "esp8266" ]; then
         # compile
         make -j4 -C ports/"${PORT}" ESPIDF=/opt/esp-idf
 
         # copy firmware out of the container
         if [ "${HENRI}" = "True" ] && [ "${DEPS}" = "True" ]; then
-                FILENAME="firmware-henri.bin"
+                FILENAME="${PORT}-henri.bin"
         elif [ "${HENRI}" = "False" ] && [ "${DEPS}" = "True" ]; then
-                FILENAME="firmware-deps.bin"
+                FILENAME="${PORT}-deps.bin"
         elif [ "${HENRI}" = "False" ] && [ "${DEPS}" = "False" ]; then
-                FILENAME="firmware.bin"
+                FILENAME="${PORT}.bin"
         fi
-        cp ports/"${PORT}"/build/firmware.bin "/build/$FILENAME"
+        if [ "${PORT}" = "esp8266" ]; then
+                cp ports/"${PORT}"/build/firmware-combined.bin "/build/$FILENAME"
+        else
+                cp ports/"${PORT}"/build/firmware.bin "/build/$FILENAME"
+        fi
+
 elif [ "${PORT}" = "unix" ]; then
-        make -j4 -C ports/"${PORT}" axtls
+        # make -j4 -C ports/"${PORT}" axtls
         make -j4 -C ports/"${PORT}"
         cp ports/"${PORT}"/pycopy /build/pycopy
+
 fi

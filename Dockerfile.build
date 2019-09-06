@@ -1,5 +1,5 @@
 FROM ubuntu:xenial
-ENV PATH="/opt/xtensa-esp32-elf/bin:${PATH}"
+ENV PATH="/opt/xtensa-esp32-elf/bin:/opt/esp-open-sdk/xtensa-lx106-elf/bin:${PATH}"
 
 ADD submodules/pycopy/ports/esp32/Makefile /tmp/Makefile
 
@@ -42,12 +42,18 @@ RUN set -ex \
  && pip3 install pyparsing \
  && pip install pyserial \
  && cd /opt \
+ && echo "=== ESP32 ===" \
  && wget https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz \
  && tar xvfz xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz \
  && rm xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz \
  && git clone https://github.com/espressif/esp-idf.git \
  && git -C esp-idf checkout $(grep "ESPIDF_SUPHASH :=" /tmp/Makefile | cut -d " " -f 3) \
  && git -C esp-idf submodule update --init components/json/cJSON components/esp32/lib components/esptool_py/esptool components/expat/expat components/lwip/lwip components/mbedtls/mbedtls components/micro-ecc/micro-ecc components/nghttp/nghttp2 \
+ && echo "=== ESP8266 ===" \
+ && git clone --recursive https://github.com/pfalcon/esp-open-sdk.git \
+ && cd esp-open-sdk \
+ && chown -Rv builder /opt/esp-open-sdk \
+ && su -c make builder \
  && cd / \
  && rm /tmp/Makefile \
  && rm -rf /var/lib/apt/lists/*
