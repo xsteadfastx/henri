@@ -1,4 +1,3 @@
-import henri.app
 import picoweb
 import uasyncio as asyncio
 import ulogging as logging
@@ -22,8 +21,8 @@ def events(req, resp):
     yield from resp.awrite("\r\n")
     try:
         while True:
-            if henri.app.EQ:
-                yield from resp.awrite("data: %s\n\n" % henri.app.EQ)
+            if APP.push_event:
+                yield from resp.awrite("data: %s\n\n" % APP.push_event)
             yield from asyncio.sleep(0.1)
     except OSError:
         logging.info("Event source connection closed")

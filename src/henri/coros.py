@@ -1,15 +1,15 @@
 import gc
 import random
 
-import henri.app
 import uasyncio as asyncio
 import ulogging as logging
+from henri.app import APP
 
 
 async def event_filler():
     while True:
-        henri.app.EQ = random.randint(0, 100)
-        logging.debug("queue: %s" % henri.app.EQ)
+        APP.push_event = random.randint(0, 100)
+        logging.debug("queue: %s" % APP.push_event)
         await asyncio.sleep(0.3)
 
 
