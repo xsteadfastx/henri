@@ -5,7 +5,7 @@
 	sync \
 	build-builder push-builder \
 	build-esp32 build-esp8266 build-unix \
-	flash erase-flash flash-henri flash-deps flash-plain \
+	erase-flash flash-henri flash-deps flash-plain \
 	res
 
 init:
@@ -33,7 +33,7 @@ build-builder:
 push-builder:
 	docker push quay.io/xsteadfastx/henri-builder
 
-build-esp32: res
+build-henri: res
 	docker run --rm -ti \
 		-v $(PWD):/origin:ro \
 		-v $(PWD)/build:/build \
@@ -41,6 +41,8 @@ build-esp32: res
 		-e "PORT=esp32" \
 		quay.io/xsteadfastx/henri-builder \
 		sh /origin/.build.sh
+
+build-esp32: res build-henri
 	docker run --rm -ti \
 		-v $(PWD):/origin:ro \
 		-v $(PWD)/build:/build \
@@ -93,13 +95,13 @@ erase-flash:
 	poetry run esptool.py --port /dev/ttyUSB0 erase_flash
 
 flash-henri: erase-flash
-	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-henri.bin
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/esp32-henri.bin
 
 flash-deps: erase-flash
-	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-deps.bin
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/esp32-deps.bin
 
 flash-plain: erase-flash
-	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/firmware-plain.bin
+	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/esp32-plain.bin
 
 run:
 	rm src/henri/templates/*_html.py
