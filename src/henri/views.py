@@ -2,12 +2,16 @@ import picoweb
 import uasyncio as asyncio
 import ulogging as logging
 from henri.app import APP
+from henri.develop import process
 
 
 @APP.route("/", methods=["GET", "POST"])
 def index(req, resp):
     if req.method == "POST":
         yield from req.read_form_data()
+        asyncio.get_event_loop().create_task(
+            process(60, [60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 40, 30, 20, 10, 0])
+        )
         print(req.form)
     yield from picoweb.start_response(resp)
     yield from APP.render_template(resp, "index.html")
