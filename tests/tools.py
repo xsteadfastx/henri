@@ -28,11 +28,43 @@ class Mock:
         return self.calls
 
 
-def AsyncMock(*args, **kwargs):
-    m = Mock(*args, **kwargs)
+class AsyncMock(Mock):
+    async def __call__(self, *args, **kwargs):
+        return super(AsyncMock, self).__call__(*args, **kwargs)
 
-    async def mock_coro(*args, **kwargs):
-        return m(*args, **kwargs)
 
-    mock_coro.mock = m
-    return mock_coro
+class MonkeyPatch:
+    """Monkeypatch some object.
+
+    Example:
+        You can use it like this::
+
+            from tools import MonkeyPatch
+            from tools import Mock
+
+            mock_zack = Mock()
+            mock_zack.return_value = "bumm"
+
+            with MonkeyPatch(foo, "zack", mock_foo):
+                print(foo.zack())
+
+
+    Args:
+        object (callable): Object to patch.
+        name (str): Name of attribute to set.
+        patch (callable): Object that gets set to the attribute.
+
+    """
+
+    def __init__(self, object, name, patch):
+        self.object = object
+        self.name = name
+        self.patch = patch
+        self.pre_patch_value = None
+
+    def __enter__(self):
+        self.pre_patch_value = getattr(self.object, self.name)
+        setattr(self.object, self.name, self.patch)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        setattr(self.object, self.name, self.pre_patch_value)

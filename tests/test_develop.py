@@ -85,3 +85,14 @@ class TestDevelop(unittest.TestCase):
                 50,
             ],
         )
+
+    def test_process(self):
+        mock_agitate = tools.AsyncMock()
+        mock_sleep = tools.AsyncMock()
+
+        tools.AsyncTestRunner().run(
+            henri.develop.process(60, [50, 40, 30, 20, 10], mock_agitate, mock_sleep)
+        )
+
+        print(mock_agitate.call_args_list)
+        print(mock_sleep.call_args_list)

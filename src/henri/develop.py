@@ -20,12 +20,14 @@ async def agitate():
     await asyncio.sleep(0.5)
 
 
-async def process(seconds, agitate_list):
+async def process(seconds, agitate_list, agitate_generator, sleep_generator):
     """Negative process runner.
 
     Args:
         seconds (int): Full process seconds.
         agitate_list (list): List with seconds on which to agitate.
+        agitate_generator (generator): The async generator that agitates the servo.
+        sleep_generator (generator): Normally the uasyncio.sleep generator.
 
     """
     counter = seconds
@@ -33,11 +35,11 @@ async def process(seconds, agitate_list):
         logging.debug("second: {}".format(counter))
         if counter in agitate_list:
             APP.push_event = "AGITATE!"
-            await agitate()
+            await agitate_generator()
             logging.debug("AGITATE")
         else:
             APP.push_event = str(counter)
-            await asyncio.sleep(1)
+            await sleep_generator(1)
         counter -= 1
     APP.push_event = "DONE"
 
