@@ -2,6 +2,7 @@ import sys
 import unittest
 
 import tools
+import uasyncio as asyncio
 
 sys.path.insert(0, "../src")
 import henri.develop  # isort:skip
@@ -90,9 +91,11 @@ class TestDevelop(unittest.TestCase):
         mock_agitate = tools.AsyncMock()
         mock_sleep = tools.AsyncMock()
 
-        tools.AsyncTestRunner().run(
-            henri.develop.process(60, [50, 40, 30, 20, 10], mock_agitate, mock_sleep)
-        )
+        with tools.MonkeyPatch(henri.develop, "agitate", mock_agitate):
+            with tools.MonkeyPatch(asyncio, "sleep", mock_sleep):
+                tools.AsyncTestRunner().run(
+                    henri.develop.process(60, [50, 40, 30, 20, 10])
+                )
 
-        print(mock_agitate.call_args_list)
-        print(mock_sleep.call_args_list)
+        self.assertEqual(len(mock_agitate.call_args_list), 5)
+        self.assertEqual(len(mock_sleep.call_args_list), 55)
