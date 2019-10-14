@@ -3,14 +3,14 @@ kind: pipeline
 name: build
 workspace:
   base: /origin
+clone:
+  disable: true
 steps:
-  - name: submodules
+  - name: clone
     image: docker:git
     commands:
-      - git submodule init
-      - git submodule update --recursive --remote
-      - git -C submodules/pycopy submodule init
-      - git -C submodules/pycopy submodule update --recursive --remote
+      - git clone --recursive https://github.com/xsteadfastx/henri.git .
+      - git checkout $DRONE_COMMIT
   - name: esp32-henri
     image: quay.io/xsteadfastx/henri-builder
     environment:
