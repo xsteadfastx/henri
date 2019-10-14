@@ -9,6 +9,8 @@ steps:
     commands:
       - git submodule init
       - git submodule update --recursive --remote
+      - git -C submodules/pycopy submodule init
+      - git -C submodules/pycopy submodule update --recursive --remote
   - name: esp32-henri
     image: quay.io/xsteadfastx/henri-builder
     environment:
