@@ -47,7 +47,28 @@ steps:
     commands:
       - sudo mkdir /build
       - sh .build.sh
-  - name: test
+  - name: unittest
     image: quay.io/xsteadfastx/henri-builder
     commands:
       - /build/build/pycopy -m test
+  - name: flake8
+    image: xsteadfastx/tox-python:minimal
+    environment:
+      TOX_WORK_DIR: /tmp/tox
+    commands:
+      - sudo apk add --no-cache gcc musl-dev
+      - tox -v -e flake8
+  - name: pylint
+    image: xsteadfastx/tox-python:minimal
+    environment:
+      TOX_WORK_DIR: /tmp/tox
+    commands:
+      - sudo apk add --no-cache gcc musl-dev
+      - tox -v -e pylint
+  - name: black
+    image: xsteadfastx/tox-python:minimal
+    environment:
+      TOX_WORK_DIR: /tmp/tox
+    commands:
+      - sudo apk add --no-cache gcc musl-dev
+      - tox -v -e black-only-check
