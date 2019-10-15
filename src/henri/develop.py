@@ -54,6 +54,8 @@ async def create_agitate_list(complete_seconds, recur_interval):
         list: A list contains seconds on which a agitation accures.
 
     """
+    logging.debug("got complete_seconds: {}".format(complete_seconds))
+    logging.debug("got recur_interval: {}".format(recur_interval))
     agitate_list = list(reversed(range(complete_seconds - 60, complete_seconds)))
     counter = complete_seconds - 60 - recur_interval
     while counter != 0:

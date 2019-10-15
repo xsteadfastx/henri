@@ -19,30 +19,12 @@
       <form action=".", method="POST">
         <fieldset>
           <h3>Process Time</h3>
-          <label>Minutes</label>
+          <label>Full Process Time (Minutes)</label>
           <input type="text" placeholder="7" name="full_process_time" id="full_process_time">
-          <br/>
-          <br/>
-          <h3>Initial</h3>
-          <label>Minutes</label>
-          <select id="init_time" name="init_time">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <label>Interval (sec)</label>
-          <select id="init_interval" name="init_interval">
-            <option value="2">2</option>
-            <option value="5">5</option>
-            <option value="10">10</option>
-          </select>
+          <label>Agitation Rythm</label>
+          <select id="recur_interval" name="recur_interval">
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
           <br/>
           <br/>
           <input class="button-primary" type="submit" value="Lets rock...">
