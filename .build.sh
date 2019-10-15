@@ -36,11 +36,6 @@ if [ "${DEPS}" = "True" ]; then
                 /henri/submodules/pycopy-lib/ulogging/ulogging.py \
                 /henri/submodules/pycopy/ports/"${PORT}"/modules/ulogging.py
 
-        # random
-        ln -s \
-                /henri/submodules/pycopy-lib/random/random.py \
-                /henri/submodules/pycopy/ports/"${PORT}"/modules/random.py
-
         # tinydns
         ln -s \
                 /henri/submodules/tinydns/tinydns \
@@ -55,6 +50,11 @@ if [ "${DEPS}" = "True" ]; then
                 ln -s \
                         /henri/submodules/pycopy-lib/unittest/unittest.py \
                         /henri/submodules/pycopy/ports/"${PORT}"/modules/unittest.py
+
+                # umock
+                ln -s \
+                        /henri/submodules/umock/src/umock \
+                        /henri/submodules/pycopy/ports/"${PORT}"/modules/umock
        fi
 fi
 ## henri

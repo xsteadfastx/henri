@@ -1,8 +1,8 @@
 import sys
 import unittest
 
-import tools
 import uasyncio as asyncio
+import umock
 
 sys.path.insert(0, "../src")
 import henri.develop  # isort:skip
@@ -10,7 +10,7 @@ import henri.develop  # isort:skip
 
 class TestDevelop(unittest.TestCase):
     def test_create_agitate_list(self):
-        resp = tools.AsyncTestRunner().run(henri.develop.create_agitate_list(180, 60))
+        resp = umock.AsyncTestRunner().run(henri.develop.create_agitate_list(180, 60))
         self.assertEqual(
             resp,
             [
@@ -88,12 +88,12 @@ class TestDevelop(unittest.TestCase):
         )
 
     def test_process(self):
-        mock_agitate = tools.AsyncMock()
-        mock_sleep = tools.AsyncMock()
+        mock_agitate = umock.AsyncMock()
+        mock_sleep = umock.AsyncMock()
 
-        with tools.MonkeyPatch(henri.develop, "agitate", mock_agitate):
-            with tools.MonkeyPatch(asyncio, "sleep", mock_sleep):
-                tools.AsyncTestRunner().run(
+        with umock.MonkeyPatch(henri.develop, "agitate", mock_agitate):
+            with umock.MonkeyPatch(asyncio, "sleep", mock_sleep):
+                umock.AsyncTestRunner().run(
                     henri.develop.process(60, [50, 40, 30, 20, 10])
                 )
 

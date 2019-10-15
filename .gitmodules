@@ -13,3 +13,6 @@
 [submodule "submodules/tinydns"]
 	path = submodules/tinydns
 	url = https://github.com/xsteadfastx/tinydns.git
+[submodule "submodules/umock"]
+	path = submodules/umock
+	url = https://github.com/xsteadfastx/umock.git

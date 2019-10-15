@@ -1,9 +1,18 @@
 import sys
 
+import uasyncio as asyncio
 import ulogging as logging
+import umock
 
 sys.path.insert(0, "src/")
 import henri.__main__  # isort:skip
+import henri.develop  # isort:skip
+
+
+async def mock_agitate():
+    await asyncio.sleep(1)
+
 
 logging.basicConfig(level=logging.DEBUG)
-henri.__main__.main(port="8180")
+with umock.MonkeyPatch(henri.develop, "agitate", mock_agitate):
+    henri.__main__.main(port="8180")
