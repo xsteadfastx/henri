@@ -86,7 +86,7 @@ build-unix: res
 		-v $(PWD):/origin:ro \
 		-v $(PWD)/build:/build \
 		-v henri-build-temp:/henri/submodules/pycopy/lib \
-		-e "HENRI=True" -e "DEPS=True" -e "PORT=unix" \
+		-e "HENRI=False" -e "DEPS=True" -e "PORT=unix" \
 		quay.io/xsteadfastx/henri-builder \
 		sh /origin/.build.sh
 
@@ -105,7 +105,7 @@ flash-plain: erase-flash
 	poetry run esptool.py --chip esp32 --port /dev/ttyUSB0 write_flash -z 0x1000 build/esp32-plain.bin
 
 run:
-	rm src/henri/templates/*_html.py
+	-rm src/henri/templates/*_html.py
 	build/pycopy -m run
 
 res:
