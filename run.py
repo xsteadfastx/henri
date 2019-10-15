@@ -10,6 +10,7 @@ import henri.develop  # isort:skip
 
 
 async def mock_agitate():
+    logging.debug("THIS IS A SIMULATED AGITATION")
     await asyncio.sleep(1)
 
 
