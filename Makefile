@@ -6,7 +6,8 @@
 	build-builder push-builder \
 	build-esp32 build-esp8266 build-unix \
 	erase-flash flash-henri flash-deps flash-plain \
-	res
+	res \
+	submodule-update
 
 init:
 	poetry install
@@ -109,3 +110,8 @@ run:
 
 res:
 	cd src/henri; ../../submodules/pycopy/tools/mpy_bin2res.py static/css/* >R.py
+
+submodule-update:
+	git submodule foreach git remote update
+	git submodule foreach 'git reset --hard `git rev-list --max-parents=0 HEAD`'
+	git submodule foreach git merge upstream/master
