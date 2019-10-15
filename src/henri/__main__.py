@@ -21,6 +21,5 @@ def main(**params):
     micropython.mem_info()
 
     loop = asyncio.get_event_loop()
-    # loop.create_task(coros.event_filler())
     loop.create_task(coros.janitor())
     APP.run(debug=True, **params)
