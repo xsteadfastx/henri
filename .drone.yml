@@ -11,46 +11,61 @@ steps:
     commands:
       - git clone --recursive https://github.com/xsteadfastx/henri.git .
       - git checkout $DRONE_COMMIT
+  - name: fix permissions
+    image: alpine:3.10
+    commands:
+      - chown -Rv 1000:1000 /origin
   - name: esp32-henri
     image: quay.io/xsteadfastx/henri-builder
+    volumes:
+      - name: build_cache
+        path: /build
     environment:
       HENRI: True
       DEPS: True
       PORT: esp32
     commands:
-      - sudo mkdir /build
       - sh .build.sh
   - name: esp32-deps
     image: quay.io/xsteadfastx/henri-builder
+    volumes:
+      - name: build_cache
+        path: /build
     environment:
       HENRI: False
       DEPS: True
       PORT: esp32
     commands:
-      - sudo mkdir /build
       - sh .build.sh
   - name: esp32-plain
     image: quay.io/xsteadfastx/henri-builder
+    volumes:
+      - name: build_cache
+        path: /build
     environment:
       HENRI: False
       DEPS: False
       PORT: esp32
     commands:
-      - sudo mkdir /build
       - sh .build.sh
   - name: unix
     image: quay.io/xsteadfastx/henri-builder
+    volumes:
+      - name: build_cache
+        path: /build
     environment:
       HENRI: True
       DEPS: True
       PORT: unix
     commands:
-      - sudo mkdir /build
       - sh .build.sh
   - name: unittest
     image: quay.io/xsteadfastx/henri-builder
+    volumes:
+      - name: build_cache
+        path: /build
     commands:
-      - /build/build/pycopy -m test
+      - /build/pycopy -m test
   - name: flake8
     image: xsteadfastx/tox-python:minimal
     environment:
@@ -72,3 +87,6 @@ steps:
     commands:
       - sudo apk add --no-cache gcc musl-dev
       - tox -v -e black-only-check
+volumes:
+  - name: build_cache
+    temp: {}
