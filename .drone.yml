@@ -47,3 +47,7 @@ steps:
     commands:
       - sudo mkdir /build
       - sh .build.sh
+  - name: test
+    image: quay.io/xsteadfastx/henri-builder
+    commands:
+      - build/pycopy -m test
