@@ -4,18 +4,6 @@ def render(*a, **d):
 <html>
   <head>
       <link href=\"static/css/milligram.min.css\" rel=\"stylesheet\">
-      <script>
-      var source = new EventSource(\"events\");
-      source.onmessage = function(event) """
-    yield """{
-          document.getElementById(\"result\").innerHTML = event.data;
-      }
-      source.onerror = function(error) """
-    yield """{
-          console.log(error);
-          document.getElementById(\"result\").innerHTML += \"EventSource error:\" + error + \"<br>\";
-      }
-    </script>
   </head>
   <body>
     <div class=\"container\">
@@ -34,7 +22,6 @@ def render(*a, **d):
           <input class=\"button-primary\" type=\"submit\" value=\"Lets rock...\">
         </fieldset>
       </form>
-      <div>random int: <span id=\"result\"></span> (SSE Test)</div>
     </div>
   </body>
 </html>
